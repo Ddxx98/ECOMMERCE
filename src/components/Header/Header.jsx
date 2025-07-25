@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';  // Import Link from react-router-dom
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,7 +18,6 @@ const pages = ['Home', 'Store', 'About', 'Contact'];
 
 function Header() {
   const [cartOpen, setCartOpen] = useState(false);
-
   const { totalQuantity } = useCart();
 
   return (
@@ -35,11 +36,12 @@ function Header() {
           {/* Left: Logo */}
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            {/* Use Link for navigation */}
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
+              component={Link}  // Use Link instead of anchor tag
+              to="/"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -59,6 +61,8 @@ function Header() {
             {pages.map((page) => (
               <Button
                 key={page}
+                component={Link}       // Use Link here for client-side routing
+                to={page === 'Home' ? '/' : `/${page.toLowerCase()}`}
                 sx={{
                   my: 2,
                   color: 'white',
@@ -73,8 +77,8 @@ function Header() {
                     backgroundColor: (theme) => theme.palette.secondary.main,
                     color: (theme) => theme.palette.background.default,
                   },
+                  textDecoration: 'none',
                 }}
-                href={`${page.toLowerCase()}`}
               >
                 {page}
               </Button>

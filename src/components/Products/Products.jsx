@@ -18,24 +18,40 @@ import CartDialog from '../Cart/Cart';
 // Merch products array
 const merchProducts = [
   {
-    title: 'Colors',
-    price: 100,
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
+    title: 'The Generics Classic T-Shirt',
+    price: 1200,
+    imageUrl: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
+    description: 'Comfortable cotton tee with band logo.',
   },
   {
-    title: 'Black and white Colors',
-    price: 50,
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
+    title: 'The Generics Baseball Cap',
+    price: 800,
+    imageUrl: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80',
+    description: 'Stylish embroidered cap to shield you from the sun.',
   },
   {
-    title: 'Yellow and Black Colors',
-    price: 70,
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
+    title: 'Limited Edition Band Poster',
+    price: 500,
+    imageUrl: 'https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=600&q=80',
+    description: 'High-quality print poster for collectors.',
   },
   {
-    title: 'Blue Color',
-    price: 100,
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%204.png',
+    title: 'The Generics Hoodie',
+    price: 2500,
+    imageUrl: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80',
+    description: 'Warm and cozy hoodie perfect for cold concerts.',
+  },
+  {
+    title: 'Band Enamel Pin Set',
+    price: 400,
+    imageUrl: 'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=600&q=80',
+    description: 'Collectible pin set featuring band icons.',
+  },
+  {
+    title: 'The Generics Tote Bag',
+    price: 1000,
+    imageUrl: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80',
+    description: 'Eco-friendly and practical tote bag for everyday use.',
   }
 ];
 
@@ -109,7 +125,7 @@ function ProductPage() {
       </Box>
       <Grid container spacing={4} justifyContent="center">
         {products.map((product, idx) => (
-          <Grid item key={idx} xs={12} sm={6} md={6} lg={6}>
+          <Grid  key={idx} >
             <Card
               sx={{
                 maxWidth: 345,
