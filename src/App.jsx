@@ -2,16 +2,20 @@ import './App.css'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import Products from './components/Products/Products'
-import {ProductContext} from './context/ProductContext'
+import { ThemeProvider } from '@mui/material/styles';
+import Theme from './Theme'
+import { CartProvider } from './context/CartContext'
 
 function App() {
 
   return (
-    <ProductContext.Provider>
-      <Header></Header>
-      <Products></Products>
-      <Footer></Footer>
-    </ProductContext.Provider>
+    <ThemeProvider theme={Theme}>
+      <CartProvider>
+        <Header />
+        <Products />
+        <Footer />
+      </CartProvider>
+    </ThemeProvider>
   )
 }
 
