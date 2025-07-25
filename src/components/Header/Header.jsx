@@ -74,7 +74,7 @@ function Header() {
                     color: (theme) => theme.palette.background.default,
                   },
                 }}
-                href={`#${page.toLowerCase()}`}
+                href={`${page.toLowerCase()}`}
               >
                 {page}
               </Button>
