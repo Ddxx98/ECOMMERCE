@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';  // <-- Import Link for routing
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -15,7 +16,6 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { useCart } from '../../context/CartContext';
 import CartDialog from '../Cart/Cart';
 
-// Merch products array
 const merchProducts = [
   {
     title: 'The Generics Classic T-Shirt',
@@ -96,6 +96,7 @@ function ProductPage() {
     setSnackbarOpen(false);
   };
 
+  // ENHANCED: Use title as id in the URL (encodeURIComponent for safety)
   const renderSection = (title, icon, products) => (
     <Box sx={{ mb: 6 }}>
       <Box
@@ -125,7 +126,7 @@ function ProductPage() {
       </Box>
       <Grid container spacing={4} justifyContent="center">
         {products.map((product, idx) => (
-          <Grid  key={idx} >
+          <Grid item xs={12} sm={6} md={6} lg={6} key={idx}> {/* <-- Add Grid sizing */}
             <Card
               sx={{
                 maxWidth: 345,
@@ -135,14 +136,19 @@ function ProductPage() {
                 mx: 'auto',
               }}
             >
-              <CardMedia
-                component="img"
-                height="200"
-                width="100%"
-                image={product.imageUrl}
-                alt={product.title}
-                sx={{ objectFit: 'cover' }}
-              />
+              {/* Wrap image in Link to product details */}
+              <Link
+                to={`/product/${encodeURIComponent(product.title)}`}
+                style={{ textDecoration: "none" }}
+              >
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={product.imageUrl}
+                  alt={product.title}
+                  sx={{ objectFit: 'cover', cursor: 'pointer', transition: 'box-shadow 0.2s', '&:hover': { boxShadow: 6 } }}
+                />
+              </Link>
               <CardContent>
                 <Typography
                   gutterBottom
@@ -152,6 +158,15 @@ function ProductPage() {
                 >
                   {product.title}
                 </Typography>
+                {/* Optionally show a description */}
+                {product.description && (
+                  <Typography
+                    variant="body2"
+                    sx={{ color: (theme) => theme.palette.text.secondary, mb: 1 }}
+                  >
+                    {product.description}
+                  </Typography>
+                )}
                 <Typography variant="body1" sx={{ color: (theme) => theme.palette.secondary.main }}>
                   ₹{product.price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </Typography>
