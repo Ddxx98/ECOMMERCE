@@ -9,9 +9,9 @@ import { CartProvider } from './context/CartContext'
 import { Routes, Route } from "react-router-dom";
 import Home  from './pages/Home'
 import Store from './pages/Store'
+import ContactUs from './pages/ContactUs'
 
 function App() {
-
   return (
     <ThemeProvider theme={Theme}>
       <CartProvider>
@@ -21,6 +21,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/store" element={<Store />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactUs />} />
         </Routes>
         <Footer />
       </CartProvider>
