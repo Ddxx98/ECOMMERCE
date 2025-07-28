@@ -11,6 +11,7 @@ import Home  from './pages/Home'
 import Store from './pages/Store'
 import ContactUs from './pages/ContactUs'
 import ProductDetails from './components/Products/ProductDetails'
+import AuthPage from './pages/AuthPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/auth" element={<AuthPage />}/>
           <Route path="/store" element={<Store />} />
            <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/about" element={<AboutPage />} />
