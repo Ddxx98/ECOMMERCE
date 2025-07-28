@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
+import axios from 'axios';
 
 export default function AuthPage() {
   const [view, setView] = useState('login'); 
@@ -29,20 +30,27 @@ export default function AuthPage() {
     setLoading(true);
     setMessage(null);
 
-    // Simulate delay
-    setTimeout(() => {
-      if (view === 'login') {
-        if (form.email === 'user@example.com' && form.password === 'password') {
-          setMessage({ type: 'success', text: 'Login successful!' });
+    try{
+        if (view === 'login') {
+            const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]', {
+                email: form.email,
+                password: form.password,
+                returnSecureToken: true
+            });
+            console.log(response.data);
         } else {
-          setMessage({ type: 'error', text: 'Invalid email or password.' });
+            const response = await axios.post('http://localhost:3000/register', form);
+            console.log(response.data);
         }
-      } else {
-        setMessage({ type: 'success', text: 'Account created! Please login.' });
-        setView('login');
-      }
-      setLoading(false);
-    }, 1200);
+    } catch (error) {
+        console.error(error);
+        if (error.response) {
+            setMessage({ type: 'error', text: error.response.data.message });
+        } else {
+            setMessage({ type: 'error', text: 'An error occurred. Please try again.' });
+        }
+    }
+    setLoading(false);
   };
 
   // Reset form fields and messages on view switch
