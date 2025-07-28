@@ -23,8 +23,6 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
-  const { setToken } = useAuth(); // ADDED
-
   const handleChange = (e) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   };
