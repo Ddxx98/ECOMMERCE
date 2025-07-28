@@ -4,23 +4,19 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => {
-    // Optional: If you want persistence between reloads, uncomment this line:
-    // return localStorage.getItem('token') || null;
-    return null;
+    return localStorage.getItem('token') || null;
   });
 
   // Function to log in and store the token
   const login = (newToken) => {
     setToken(newToken);
-    // If using persistence:
-    // localStorage.setItem('token', newToken);
+    localStorage.setItem('token', newToken);
   };
 
   // Function to log out (clear token)
   const logout = () => {
     setToken(null);
-    // If using persistence:
-    // localStorage.removeItem('token');
+    localStorage.removeItem('token');
   };
 
   const value = {
