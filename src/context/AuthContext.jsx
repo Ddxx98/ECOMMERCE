@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const timerRef = useRef(null); 
+
   const [token, setToken] = useState(() => {
     return localStorage.getItem('token') || null;
   });
@@ -18,6 +20,26 @@ export function AuthProvider({ children }) {
     setToken(null);
     localStorage.removeItem('token');
   };
+
+  useEffect(() => {
+    // Clear any previous timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    if (token) {
+      // Set new timer (5min = 300,000ms)
+      timerRef.current = setTimeout(() => {
+        logout();
+        // Optionally, show a toast/snackbar: "Session expired. Please login again."
+      }, 5 * 60 * 1000); // 5 minutes
+    }
+    // Clean up on unmount
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+    // eslint-disable-next-line
+  }, [token]);
 
   const value = {
     token,
