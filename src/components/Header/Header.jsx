@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Import Link from react-router-dom
+import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate for logout redirect
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,12 +13,21 @@ import AdbIcon from '@mui/icons-material/Adb';
 
 import CartDialog from '../Cart/Cart';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext'; // <-- Import AuthContext hook
 
 const pages = ['Home', 'Store', 'About', 'Contact'];
 
 function Header() {
   const [cartOpen, setCartOpen] = useState(false);
   const { totalQuantity } = useCart();
+  const { isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
+
+  // Handler for logout. Optionally redirect to Home page.
+  const handleLogout = () => {
+    logout();
+    navigate('/'); // Redirect to Home or Login after logout
+  };
 
   return (
     <>
@@ -36,11 +45,10 @@ function Header() {
           {/* Left: Logo */}
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-            {/* Use Link for navigation */}
             <Typography
               variant="h6"
               noWrap
-              component={Link}  // Use Link instead of anchor tag
+              component={Link}
               to="/"
               sx={{
                 mr: 2,
@@ -61,7 +69,7 @@ function Header() {
             {pages.map((page) => (
               <Button
                 key={page}
-                component={Link}       // Use Link here for client-side routing
+                component={Link}
                 to={page === 'Home' ? '/' : `/${page.toLowerCase()}`}
                 sx={{
                   my: 2,
@@ -85,8 +93,57 @@ function Header() {
             ))}
           </Box>
 
-          {/* Right: Shopping Cart Icon */}
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          {/* Right: Shopping Cart Icon AND Login/Logout */}
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2 }}>
+            {/* Login/Logout Button */}
+            {isLoggedIn ? (
+              <Button
+                color="secondary"
+                variant="outlined"
+                onClick={handleLogout}
+                sx={{
+                  fontWeight: 700,
+                  px: 2,
+                  borderRadius: 2,
+                  mr: 2,
+                  height: 40,
+                  borderColor: (theme) => theme.palette.secondary.main,
+                  color: (theme) => theme.palette.secondary.main,
+                  backgroundColor: 'transparent',
+                  '&:hover': {
+                    backgroundColor: (theme) => theme.palette.secondary.main,
+                    color: (theme) => theme.palette.background.default,
+                  },
+                }}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                color="secondary"
+                variant="contained"
+                component={Link}
+                to="/auth"
+                sx={{
+                  fontWeight: 700,
+                  px: 2,
+                  borderRadius: 2,
+                  mr: 2,
+                  height: 40,
+                  backgroundColor: (theme) => theme.palette.secondary.main,
+                  color: (theme) => theme.palette.background.default,
+                  '&:hover': {
+                    backgroundColor: (theme) => theme.palette.background.default,
+                    color: (theme) => theme.palette.secondary.main,
+                    border: '1px solid',
+                  },
+                }}
+              >
+                Login
+              </Button>
+            )}
+
+            {/* Shopping Cart Icon */}
             <IconButton
               color="secondary"
               aria-label="open shopping cart"

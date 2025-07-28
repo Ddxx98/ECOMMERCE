@@ -46,6 +46,7 @@ export default function AuthPage() {
           }
         );
         login(response.data.idToken); // Save token in Context!
+        isLoggedIn(true);
         setMessage({ type: 'success', text: 'Login successful!' });
       } else if (view === 'signup') {
         // *** Replace with your actual signup API ***
