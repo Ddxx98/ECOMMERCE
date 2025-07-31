@@ -19,14 +19,25 @@ import CloseIcon from '@mui/icons-material/Close';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useCart } from '../../context/CartContext';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { removeItem, updateQuantity, clearCart } from '../../store/Cart';
 
 export default function CartDialog({ open, onClose }) {
-  const { items, totalQuantity, totalPrice, updateQuantity, removeItem, clearCart } = useCart();
+  const dispatch = useDispatch();
+  const { items, totalQuantity, totalPrice } = useSelector((state) => state.cart);
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <DialogTitle
+        sx={{
+          m: 0,
+          p: 2,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         Shopping Cart
         <IconButton aria-label="close" onClick={onClose} size="large">
           <CloseIcon />
@@ -54,27 +65,30 @@ export default function CartDialog({ open, onClose }) {
                   primary={product.title}
                   secondary={`₹${product.price.toLocaleString('en-IN', {
                     minimumFractionDigits: 2,
-                  })} x ${quantity} = ₹${(product.price * quantity).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}
+                  })} x ${quantity} = ₹${(product.price * quantity).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                  })}`}
                 />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <IconButton
                     aria-label="decrease quantity"
-                    onClick={() => updateQuantity(product.title, quantity - 1)}
+                    onClick={() => dispatch(updateQuantity({ productTitle: product.title, quantity: quantity - 1 }))}
                     size="large"
+                    disabled={quantity <= 1}
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
                   <Typography>{quantity}</Typography>
                   <IconButton
                     aria-label="increase quantity"
-                    onClick={() => updateQuantity(product.title, quantity + 1)}
+                    onClick={() => dispatch(updateQuantity({ productTitle: product.title, quantity: quantity + 1 }))}
                     size="large"
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>
                   <IconButton
                     aria-label="remove item"
-                    onClick={() => removeItem(product.title)}
+                    onClick={() => dispatch(removeItem(product.title))}
                     size="large"
                     color="error"
                   >
@@ -104,7 +118,8 @@ export default function CartDialog({ open, onClose }) {
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button variant="outlined" onClick={clearCart} color="error">
+          {/* wrap clearCart dispatch in a function */}
+          <Button variant="outlined" onClick={() => dispatch(clearCart())} color="error">
             Clear Cart
           </Button>
           <Button variant="contained" onClick={onClose} color="primary">

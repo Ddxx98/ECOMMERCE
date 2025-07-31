@@ -13,8 +13,11 @@ import Alert from '@mui/material/Alert';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 
-import { useCart } from '../../context/CartContext';
+// import { useCart } from '../../context/CartContext';
 import CartDialog from '../Cart/Cart';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem, removeItem, updateQuantity, clearCart } from '../../store/Cart';
 
 const merchProducts = [
   {
@@ -80,13 +83,16 @@ const musicProducts = [
 ];
 
 function ProductPage() {
-  const { addItem, totalQuantity } = useCart();
+  const dispatch = useDispatch();
+  const { items, totalQuantity, totalPrice } = useSelector((state) => state.cart);
+
+  // const { addItem, totalQuantity } = useCart();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [cartOpen, setCartOpen] = useState(false);
 
   const handleAddToCart = (product) => {
-    addItem(product);
+    dispatch(addItem(product));
     setSnackbarMessage(`Added "${product.title}" to cart.`);
     setSnackbarOpen(true);
   };

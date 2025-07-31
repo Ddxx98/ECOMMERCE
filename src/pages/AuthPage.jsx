@@ -8,8 +8,10 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext'; // ADDED
+import { useNavigate } from 'react-router-dom';
 
 export default function AuthPage() {
+  const navigate = useNavigate();
   const [view, setView] = useState('login'); // 'login' | 'signup' | 'forgot'
   const [form, setForm] = useState({
     name: '',
@@ -18,7 +20,7 @@ export default function AuthPage() {
     newPassword: '', // for password reset
   });
 
-  const { login, logout, isLoggedIn, token } = useAuth()
+  const { login, logout, isLoggedIn, setIsLoggedIn, token } = useAuth()
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -36,7 +38,7 @@ export default function AuthPage() {
       if (view === 'login') {
         // *** Replace with your actual login API URL ***
         const response = await axios.post(
-          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]',
+          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBQF31LLQdyB-MdD9lrPsX9R-a-wVRKQ74',
           {
             email: form.email,
             password: form.password,
@@ -44,11 +46,12 @@ export default function AuthPage() {
           }
         );
         login(response.data.idToken); // Save token in Context!
-        isLoggedIn(true);
+        setIsLoggedIn(true);
         setMessage({ type: 'success', text: 'Login successful!' });
+        navigate('/store');
       } else if (view === 'signup') {
         // *** Replace with your actual signup API ***
-        await axios.post('http://localhost:3000/register', {
+        await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBQF31LLQdyB-MdD9lrPsX9R-a-wVRKQ74', {
           name: form.name,
           email: form.email,
           password: form.password,
@@ -57,7 +60,7 @@ export default function AuthPage() {
         setView('login');
       } else if (view === 'forgot') {
         // *** Password reset endpoint & payload will depend on your backend ***
-        await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=[API_KEY]', {
+        await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBQF31LLQdyB-MdD9lrPsX9R-a-wVRKQ74', {
           requestType: 'PASSWORD_RESET',
           email: form.email,
         });

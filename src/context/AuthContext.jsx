@@ -8,6 +8,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => {
     return localStorage.getItem('token') || null;
   });
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
   // Function to log in and store the token
   const login = (newToken) => {
@@ -44,6 +45,7 @@ export function AuthProvider({ children }) {
   const value = {
     token,
     isLoggedIn: !!token,
+    setIsLoggedIn,
     login,
     logout
   };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate for logout redirect
+import { Link, useNavigate } from 'react-router-dom';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,20 +13,23 @@ import AdbIcon from '@mui/icons-material/Adb';
 
 import CartDialog from '../Cart/Cart';
 import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext'; // <-- Import AuthContext hook
+import { useAuth } from '../../context/AuthContext'; 
+
+import { useSelector } from 'react-redux';
 
 const pages = ['Home', 'Store', 'About', 'Contact'];
 
 function Header() {
+  const { totalQuantity } = useSelector((state) => state.cart);
   const [cartOpen, setCartOpen] = useState(false);
-  const { totalQuantity } = useCart();
-  const { isLoggedIn, logout } = useAuth();
+  // const { totalQuantity } = useCart();
+  const { isLoggedIn, logout, setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  // Handler for logout. Optionally redirect to Home page.
   const handleLogout = () => {
     logout();
-    navigate('/'); // Redirect to Home or Login after logout
+    setIsLoggedIn(false);
+    navigate('/'); 
   };
 
   return (
@@ -64,7 +67,6 @@ function Header() {
             </Typography>
           </Box>
 
-          {/* Center: Navigation Buttons */}
           <Box sx={{ flexGrow: 2, display: 'flex', justifyContent: 'center' }}>
             {pages.map((page) => (
               <Button
@@ -93,9 +95,7 @@ function Header() {
             ))}
           </Box>
 
-          {/* Right: Shopping Cart Icon AND Login/Logout */}
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2 }}>
-            {/* Login/Logout Button */}
             {isLoggedIn ? (
               <Button
                 color="secondary"
