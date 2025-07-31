@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Header from './components/Header/Header';
@@ -7,8 +7,12 @@ import { ThemeProvider } from '@mui/material/styles';
 import Theme from './Theme';
 import { CartProvider } from './context/CartContext';
 import { useAuth } from './context/AuthContext';
+import axios from 'axios';
+import Home from './pages/Home';
 
-import Home from './pages/Home'; // eagerly loaded
+import { useSelector } from 'react-redux';
+
+import LinearProgress from '@mui/material/LinearProgress';  // <-- Import MUI LinearProgress
 
 const Store = lazy(() => import('./pages/Store'));
 const AboutPage = lazy(() => import('./components/About/About'));
@@ -25,10 +29,34 @@ function ProtectedRoute({ isAllowed, redirectTo = '/auth', children }) {
 
 function App() {
   const { isLoggedIn } = useAuth();
+  const { items, totalQuantity, totalPrice } = useSelector((state) => state.cart);
+
+  // Step 1: loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const putCartData = async () => {
+      setIsLoading(true);  // Start loading before request
+
+      try {
+        await axios.put(
+          'https://ecommerce-916e4-default-rtdb.firebaseio.com/cart.json',
+          { items, totalQuantity, totalPrice }
+        );
+      } catch (error) {
+        console.error('Failed to sync cart:', error);
+      } finally {
+        setIsLoading(false);  // Stop loading after request
+      }
+    };
+
+    putCartData();
+  }, [items, totalQuantity, totalPrice]);
 
   return (
     <ThemeProvider theme={Theme}>
       <CartProvider>
+        {isLoading && <LinearProgress color="primary" />} {/* Step 2: Show bar conditionally */}
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />

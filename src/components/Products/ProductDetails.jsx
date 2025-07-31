@@ -9,6 +9,9 @@ import CardMedia from '@mui/material/CardMedia';
 
 import { useCart } from '../../context/CartContext';
 
+import { useDispatch } from 'react-redux';
+import { addItem } from '../../store/Cart';
+
 const merchProducts = [
   {
     title: 'The Generics Classic T-Shirt',
@@ -78,6 +81,7 @@ const allProducts = [
 ];
 
 export default function ProductDetails() {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const product = allProducts.find(p => p.title === id);
 
@@ -88,7 +92,7 @@ export default function ProductDetails() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleAddToCart = () => {
-    addItem(product);
+    dispatch(addItem(product));
     setSnackbarOpen(true);
   };
 

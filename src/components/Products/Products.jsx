@@ -17,7 +17,7 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import CartDialog from '../Cart/Cart';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, removeItem, updateQuantity, clearCart } from '../../store/Cart';
+import { addItem } from '../../store/Cart';
 
 const merchProducts = [
   {
