@@ -10,7 +10,8 @@ import { useAuth } from './context/AuthContext';
 import axios from 'axios';
 import Home from './pages/Home';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCart } from './store/Cart';
 
 import LinearProgress from '@mui/material/LinearProgress';  // <-- Import MUI LinearProgress
 
@@ -28,11 +29,12 @@ function ProtectedRoute({ isAllowed, redirectTo = '/auth', children }) {
 }
 
 function App() {
+  const dispatch = useDispatch();
   const { isLoggedIn } = useAuth();
   const { items, totalQuantity, totalPrice } = useSelector((state) => state.cart);
 
   // Step 1: loading state
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const putCartData = async () => {
@@ -53,11 +55,32 @@ function App() {
     putCartData();
   }, [items, totalQuantity, totalPrice]);
 
+  useEffect(() => {
+    const getCartData = async () => {
+      setIsLoading(true);  
+
+      try {
+        const response = await axios.get(
+          'https://ecommerce-916e4-default-rtdb.firebaseio.com/cart.json'
+        );
+        const data = response.data;
+
+        dispatch(setCart(data || {}));
+      } catch (error) {
+        console.error('Failed to fetch cart data:', error);
+      } finally {
+        setIsLoading(false);  // Stop loading after request
+      }
+    };
+
+    getCartData();
+  }, []);
+
   return (
     <ThemeProvider theme={Theme}>
       <CartProvider>
-        {isLoading && <LinearProgress color="primary" />} {/* Step 2: Show bar conditionally */}
         <Header />
+        {isLoading && <LinearProgress color="primary" />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />

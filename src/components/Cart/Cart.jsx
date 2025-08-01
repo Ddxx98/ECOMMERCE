@@ -25,7 +25,7 @@ import { removeItem, updateQuantity, clearCart } from '../../store/Cart';
 
 export default function CartDialog({ open, onClose }) {
   const dispatch = useDispatch();
-  const { items, totalQuantity, totalPrice } = useSelector((state) => state.cart);
+  const { items=[], totalQuantity, totalPrice } = useSelector((state) => state.cart);
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
